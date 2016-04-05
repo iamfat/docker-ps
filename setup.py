@@ -27,7 +27,8 @@ def find_version(*file_paths):
 
 install_requires = [
     'requests >= 2.6.1, < 2.8',
-    'docker-py'
+    'docker-py',
+    'tabulate'
 ]
 
 setup(
