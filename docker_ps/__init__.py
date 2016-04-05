@@ -43,6 +43,7 @@ def main():
             container['Status']
         ])
     print(tabulate(t, headers=['CONTAINER', 'IMAGE', 'PORTS', 'STATUS']))
+    print()
 
 if __name__ == "__main__":
     main()
