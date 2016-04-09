@@ -10,7 +10,7 @@ import getopt
 from tabulate import tabulate
 from docker import Client
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 def main():
 
@@ -28,7 +28,9 @@ def main():
             sys.exit()
 
     def _port_str(c):
-        if c['PublicPort'] == c['PrivatePort']:
+        if 'PublicPort' not in c:
+            return '{pport}'.format(pport=c['PrivatePort'])
+        elif c['PublicPort'] == c['PrivatePort']:
             return '{ip}:{port}'.format(ip=c['IP'], port=c['PublicPort'])
         else:
             return '{ip}:{port} <- {pport}'.format(ip=c['IP'], 
