@@ -33,7 +33,7 @@ def main():
         elif c['PublicPort'] == c['PrivatePort']:
             return '{ip}:{port}'.format(ip=c['IP'], port=c['PublicPort'])
         else:
-            return '{ip}:{port} <- {pport}'.format(ip=c['IP'], 
+            return '{ip}:{port}>{pport}'.format(ip=c['IP'], 
                 port=c['PublicPort'], pport=c['PrivatePort'])
 
     t = []
