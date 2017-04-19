@@ -27,22 +27,18 @@ def main():
             print(__version__)
             sys.exit()
 
-    def _port_str(c):
-        if 'PublicPort' not in c:
-            return '{pport}'.format(pport=c['PrivatePort'])
-        elif c['PublicPort'] == c['PrivatePort']:
-            return '{ip}:{port}'.format(ip=c['IP'], port=c['PublicPort'])
-        else:
-            return '{ip}:{port}>{pport}'.format(ip=c['IP'],g
-                port=c['PublicPort'], pport=c['PrivatePort'])
+    def _port_str(p):
+        (pport,c)=p
+        return '(' + '/'.join(map(lambda c: '{ip}:{port}'.format(ip=c['HostIp'],
+            port=c['HostPort']), c)) + ') <- ' + pport
 
     t = []
     for container in cli.containers.list(all=True):
         t.append([
-            ', '.join(map(lambda c: c[1:], container.attrs['Names'])),
-            container.attrs['Image'],
-            ', '.join(map(_port_str, container.attrs['Ports'])),
-            container.attrs['Status']
+            container.name,
+            container.attrs['Config']['Image'],
+            ', '.join(map(_port_str, container.attrs['NetworkSettings']['Ports'].iteritems())),
+            container.status
         ])
     print(tabulate(t, headers=['CONTAINER', 'IMAGE', 'PORTS', 'STATUS']))
     print()
