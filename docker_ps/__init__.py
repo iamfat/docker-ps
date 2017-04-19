@@ -10,7 +10,7 @@ import docker
 
 from tabulate import tabulate
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 
 def main():
 
