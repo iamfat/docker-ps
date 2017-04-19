@@ -6,15 +6,15 @@ from __future__ import print_function
 import sys
 import pipes
 import getopt
+import docker
 
 from tabulate import tabulate
-from docker import Client
 
-__version__ = '0.1.1'
+__version__ = '0.1.3'
 
 def main():
 
-    cli = Client()
+    cli = docker.from_env()
 
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], "v")
@@ -33,16 +33,16 @@ def main():
         elif c['PublicPort'] == c['PrivatePort']:
             return '{ip}:{port}'.format(ip=c['IP'], port=c['PublicPort'])
         else:
-            return '{ip}:{port}>{pport}'.format(ip=c['IP'], 
+            return '{ip}:{port}>{pport}'.format(ip=c['IP'],g
                 port=c['PublicPort'], pport=c['PrivatePort'])
 
     t = []
-    for container in cli.containers():
+    for container in cli.containers.list(all=True):
         t.append([
-            ', '.join(map(lambda c: c[1:], container['Names'])),
-            container['Image'],
-            ', '.join(map(_port_str, container['Ports'])),
-            container['Status']
+            ', '.join(map(lambda c: c[1:], container.attrs['Names'])),
+            container.attrs['Image'],
+            ', '.join(map(_port_str, container.attrs['Ports'])),
+            container.attrs['Status']
         ])
     print(tabulate(t, headers=['CONTAINER', 'IMAGE', 'PORTS', 'STATUS']))
     print()
